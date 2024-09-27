@@ -1,0 +1,30 @@
+<mat-card class="example-card p-4" appearance="outlined" style="max-width: 500px; margin: auto;">
+  <!-- Cabeçalho do Cartão -->
+  <mat-card-header>
+    <div mat-card-avatar class="example-header-image"></div>
+    <mat-card-title>Jogo da Forca</mat-card-title>
+  </mat-card-header>
+
+  <!-- Imagem do Forca -->
+  <img mat-card-image class="pb-4" src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Imagem de exemplo">
+  <!-- Traços representando a palavra -->
+  <mat-card-content>
+    <h1 class="word-display">
+      <span *ngFor="let letter of displayedWord">
+        {{ letter ? letter : ' _ ' }} <!-- Exibe a letra ou traço -->
+      </span>
+    </h1>
+  </mat-card-content>
+
+  <!-- Seletor de letras/sílabas com flexbox -->
+  <mat-card-actions class="letter-selection" style="display: flex; flex-wrap: wrap;">
+    <button *ngFor="let syllable of syllables"
+            mat-flat-button
+            color="primary"
+            style="margin: 5px;"
+            (click)="selectSyllable(syllable)"
+            [disabled]="selectedSyllables.includes(syllable)">
+      {{ syllable }}
+    </button>
+  </mat-card-actions>
+</mat-card>
