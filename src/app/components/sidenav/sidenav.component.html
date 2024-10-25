@@ -1,0 +1,43 @@
+<mat-sidenav-container class="h-full">
+  <mat-sidenav class="p-4 flex justify-between" style="background-color: #6BB8E0" mode="side" opened>
+    <mat-nav-list>
+      <mat-list-item>
+        <div class="flex items-center gap-2">
+          <mat-icon>
+            person
+          </mat-icon>
+          <span>Gabriel</span>
+        </div>
+      </mat-list-item>
+      <mat-list-item>
+        <span (click)="resetContentNavigation()">Aprender</span>
+      </mat-list-item>
+      <mat-list-item>
+        <span>Configurações</span>
+      </mat-list-item>
+    </mat-nav-list>
+    <div class="p-4 flex justify-center items-end">
+      <div>
+        <p class="font-bold">BooKids</p>
+        <mat-divider></mat-divider>
+      </div>
+    </div>
+  </mat-sidenav>
+
+
+  <mat-sidenav-content class="p-6" style="background-color: #C2D9FF">
+    <div>
+      <div  class="content-container items-center flex justify-center gap-4">
+      <div class="flex flex-col gap-10 justify-center h-max w-10/12" *ngIf="conteudo == null">
+        <button class="nav-button" (click)="setContentAndNavigate('caca')" mat-flat-button color="primary">Caça Palavras</button>
+        <button class="nav-button" (click)="setContentAndNavigate('soletrando')" mat-flat-button color="primary">Soletrando</button>
+        <button class="nav-button" (click)="setContentAndNavigate('jogo-palavras')" mat-flat-button color="primary">Jogo de Palavras</button>
+        <button class="nav-button" (click)="setContentAndNavigate('jogo-letras')" mat-flat-button color="primary">Jogo das Letras</button>
+      </div>
+      </div>
+      <!-- O conteúdo principal renderizado aqui -->
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+
+</mat-sidenav-container>
