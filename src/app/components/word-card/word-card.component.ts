@@ -37,27 +37,25 @@ import {StateService} from "../../services/state.service";
 export class WordCardComponent {
   isLoading: boolean = false;
 
-  words = [
-    { word: 'BEBE', syllables: ['BE', 'BE'], url: 'https://png.pngtree.com/png-clipart/20190116/ourmid/pngtree-cute-baby-sitting-baby-mother-and-baby-baby-with-open-hands-png-image_396696.jpg' },
-    { word: 'CARTA', syllables: ['CAR', 'TA'], url: 'https://i.pinimg.com/originals/e1/b0/f9/e1b0f90c48330ec1f86ff132f2815acc.png' },
-    { word: 'CARRO', syllables: ['CAR', 'RO'], url: 'https://w7.pngwing.com/pngs/828/685/png-transparent-volkswagen-brasilia-car-volkswagen-voyage-volkswagen-do-brasil-volkswagen-compact-car-sedan-car.png' }
+  palavras = [
+    { palavra: 'BEBE', silabas: ['BE', 'BE'], url: 'https://png.pngtree.com/png-clipart/20190116/ourmid/pngtree-cute-baby-sitting-baby-mother-and-baby-baby-with-open-hands-png-image_396696.jpg' },
+    { palavra: 'CARTA', silabas: ['CAR', 'TA'], url: 'https://i.pinimg.com/originals/e1/b0/f9/e1b0f90c48330ec1f86ff132f2815acc.png' },
+    { palavra: 'CARRO', silabas: ['CAR', 'RO'], url: 'https://w7.pngwing.com/pngs/828/685/png-transparent-volkswagen-brasilia-car-volkswagen-voyage-volkswagen-do-brasil-volkswagen-compact-car-sedan-car.png' }
   ];
 
-  currentWord: { word: string; syllables: string[]; url: string } | null = null;
+  palavraAtual: { palavra: string; silabas: string[]; url: string } | null = null;
 
-  distractorSyllables: string[] = ['LI', 'LE', 'BI', 'BE', 'RA', 'RO'];
+  silabasAvulsas: string[] = ['LI', 'LE', 'BI', 'BE', 'RA', 'RO'];
 
-  correctWord: string[] = [];
+  palavraCorreta: string[] = [];
 
-  displayedWord: Array<string | null> = [];
+  palavraExibida: Array<string | null> = [];
 
-  syllables: string[] = [];
+  silabas: string[] = [];
 
-  selectedSyllables: string[] = [];
+  silabasSelecionadas: string[] = [];
 
-  setWord(word: { word: string; syllables: string[]; url: string }) {
-    this.currentWord = word;
-  }
+
 
   conteudo: string | null = null;
 
@@ -66,45 +64,49 @@ export class WordCardComponent {
   }
 
   ngOnInit() {
-    this.shuffleWord();
+    this.randomizarPalavra();
   }
 
-  shuffleWord() {
-    const randomIndex = Math.floor(Math.random() * this.words.length);
-    const randomWordObj = this.words[randomIndex];
+  setPalavra(palavra: { palavra: string; silabas: string[]; url: string }) {
+    this.palavraAtual = palavra;
+  }
 
-    this.correctWord = randomWordObj.word.split(''); // Divide a palavra em caracteres
+  randomizarPalavra() {
+    const randomIndex = Math.floor(Math.random() * this.palavras.length);
+    const palavraRandom = this.palavras[randomIndex];
 
-    this.setWord(randomWordObj)
+    this.palavraCorreta = palavraRandom.palavra.split(''); // Divide a palavra em caracteres
 
-    const revealedSyllable = randomWordObj.syllables[0]; // Primeira sílaba revelada
-    this.displayedWord = revealedSyllable.split(''); // Mostra a primeira sílaba
+    this.setPalavra(palavraRandom)
 
-    for (let i = revealedSyllable.length; i < this.correctWord.length; i++) {
-      this.displayedWord[i] = null;
+    const revelarSilaba = palavraRandom.silabas[0]; // Primeira sílaba revelada
+    this.palavraExibida = revelarSilaba.split(''); // Mostra a primeira sílaba
+
+    for (let i = revelarSilaba.length; i < this.palavraCorreta.length; i++) {
+      this.palavraExibida[i] = null;
     }
 
-    const remainingSyllables = randomWordObj.syllables.slice(1);
+    const silabasRestantes = palavraRandom.silabas.slice(1);
 
-    const distractorCount = 3; // Número de sílabas distratoras a serem adicionadas
-    const randomDistractors = this.getRandomDistractors(distractorCount);
+    const quantidadeSilabasAvulsas = 3; // Número de sílabas distratoras a serem adicionadas
+    const randomSilabasAvulsas = this.getRandomDistractors(quantidadeSilabasAvulsas);
 
-    this.syllables = this.shuffleArray([...remainingSyllables, ...randomDistractors]);
+    this.silabas = this.randomizarArray([...silabasRestantes, ...randomSilabasAvulsas]);
   }
 
   getRandomDistractors(count: number): string[] {
-    const randomDistractors = [];
-    const availableDistractors = [...this.distractorSyllables];
+    const randomSilabasAvulsas = [];
+    const availableDistractors = [...this.silabasAvulsas];
 
     for (let i = 0; i < count; i++) {
       const randomIndex = Math.floor(Math.random() * availableDistractors.length);
-      randomDistractors.push(availableDistractors.splice(randomIndex, 1)[0]);
+      randomSilabasAvulsas.push(availableDistractors.splice(randomIndex, 1)[0]);
     }
 
-    return randomDistractors;
+    return randomSilabasAvulsas;
   }
 
-  shuffleArray(array: any[]) {
+  randomizarArray(array: any[]) {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [array[i], array[j]] = [array[j], array[i]];
@@ -112,26 +114,26 @@ export class WordCardComponent {
     return array;
   }
 
-  selectSyllable(syllable: string) {
-    const nextEmptyIndex = this.displayedWord.indexOf(null);
+  selecionarSilaba(silaba: string) {
+    const proximoIndexEmpty = this.palavraExibida.indexOf(null);
 
-    if (nextEmptyIndex !== -1 && this.isCorrectSyllable(syllable, nextEmptyIndex)) {
-      this.displayedWord[nextEmptyIndex] = syllable[0]; // Pega a primeira letra da sílaba
-      this.displayedWord[nextEmptyIndex + 1] = syllable[1]; // Pega a segunda letra da sílaba
-      this.selectedSyllables.push(syllable); // Adiciona a sílaba à lista de selecionadas
+    if (proximoIndexEmpty !== -1 && this.ehSilabaCorreta(silaba, proximoIndexEmpty)) {
+      this.palavraExibida[proximoIndexEmpty] = silaba[0]; // Pega a primeira letra da sílaba
+      this.palavraExibida[proximoIndexEmpty + 1] = silaba[1]; // Pega a segunda letra da sílaba
+      this.silabasSelecionadas.push(silaba); // Adiciona a sílaba à lista de selecionadas
 
-      if (this.isWordComplete()) {
+      if (this.palavraCompleta()) {
         this.showSuccessMessage(); // Exibe o toaster quando a palavra for completa
       }
     }
   }
 
-  isCorrectSyllable(syllable: string, index: number): boolean {
-    return syllable[0] === this.correctWord[index] && syllable[1] === this.correctWord[index + 1];
+  ehSilabaCorreta(silaba: string, index: number): boolean {
+    return silaba[0] === this.palavraCorreta[index] && silaba[1] === this.palavraCorreta[index + 1];
   }
 
-  isWordComplete(): boolean {
-    return this.displayedWord.every(part => part !== null);
+  palavraCompleta(): boolean {
+    return this.palavraExibida.every(part => part !== null);
   }
 
   showSuccessMessage() {
@@ -141,8 +143,8 @@ export class WordCardComponent {
     });
     setTimeout(() => {
       this.isLoading = false;
-      this.shuffleWord();
-      this.selectedSyllables = [];
+      this.randomizarPalavra();
+      this.silabasSelecionadas = [];
     }, 3000);
   }
 
