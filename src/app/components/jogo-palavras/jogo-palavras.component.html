@@ -1,1 +1,58 @@
-<p>jogo-palavras works!</p>
+<div *ngIf="!isLoading">
+  <mat-card class="p-4 m-auto" appearance="outlined" style="max-width: 80vh; background-color: #95C5DF;">
+    <div class="p-6">
+      <div *ngIf="palavraAtual">
+        <img mat-card-image  src="{{palavraAtual.url}}" alt="Imagem de exemplo"
+             style="width: 100%; background-color: white; max-height: 50vh" fill>
+      </div>
+    </div>
+
+    <mat-card-content>
+      <h1 class="word-display">
+       <span *ngFor="let letra of palavraExibida">
+         {{ letra ? letra : ' _ ' }}
+       </span>
+      </h1>
+    </mat-card-content>
+
+    <mat-card-actions class="letter-selection flex items-center justify-center flex-wrap">
+      <div class="flex gap-4 w-full justify-evenly">
+        <!-- Primeira coluna -->
+        <div class="flex flex-col gap-2">
+          <button *ngFor="let silaba of silabas.slice(0, silabas.length / 2)"
+                  mat-flat-button
+                  color="primary"
+                  class="m-1"
+                  (click)="selecionarSilaba(silaba)"
+                  [disabled]="silabasSelecionadas.includes(silaba)">
+            {{ silaba }}
+          </button>
+        </div>
+        <!-- Segunda coluna -->
+        <div class="flex flex-col gap-2">
+          <button *ngFor="let silaba of silabas.slice(silabas.length / 2)"
+                  mat-flat-button
+                  color="primary"
+                  class="m-1"
+                  (click)="selecionarSilaba(silaba)"
+                  [disabled]="silabasSelecionadas.includes(silaba)">
+            {{ silaba }}
+          </button>
+        </div>
+      </div>
+    </mat-card-actions>
+  </mat-card>
+
+</div>
+
+
+<ng-container *ngIf="isLoading" class="max-h-max m-0">
+  <app-loader></app-loader>
+</ng-container>
+
+
+<div *ngIf="!isLoading" class="float-left flex-1">
+  <button (click)="resetContentNavigation()" class="button-color cursor-pointer relative flex gap-1 px-8 py-4 bg-[#5c5fe9] text-[#f1f1f1] rounded-3xl hover:bg-opacity-70 font-semibold shadow-xl active:shadow-inner transition-all duration-300">
+    Retornar
+  </button>
+</div>

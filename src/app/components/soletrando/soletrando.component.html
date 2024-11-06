@@ -1,43 +1,41 @@
-<div *ngIf="!isLoading; else loadingTemplate">
-  <mat-card class="p-8" appearance="outlined" style="max-width: 80vh; margin: auto; background-color: #D9D9D9; max-height: 80vh">
+<div *ngIf="!isLoading;">
+  <mat-card class="p-8 m-auto max-h-max" appearance="outlined" style="max-width: 80vh; background-color: #95C5DF;">
     <div class="p-6">
       <div *ngIf="currentWord">
-        <img mat-card-image class="p-4" src="{{currentWord.url}}" alt="Imagem de exemplo" style="width: 100%; background-color: white; max-height: 50vh">
+        <img mat-card-image src="{{currentWord.url}}" alt="Imagem de exemplo" style="width: 100%; background-color: #95C5DF; max-height: 50vh">
       </div>
     </div>
 
     <mat-card-content>
       <h1 class="word-display">
-       <span *ngFor="let letter of displayedWord">
-         {{ letter ? letter : ' _ ' }}
-       </span>
+        <span *ngFor="let letter of displayedWord">
+          {{ letter ? letter : ' _ ' }}
+        </span>
       </h1>
     </mat-card-content>
 
     <mat-card-actions class="letter-selection flex items-center justify-center" style="display: flex; flex-wrap: wrap;">
-      <button *ngFor="let syllable of syllables"
+      <button *ngFor="let letter of letters"
               mat-flat-button
               color="primary"
               style="margin: 5px;"
-              (click)="selectSyllable(syllable)"
-              [disabled]="selectedSyllables.includes(syllable)">
-        {{ syllable }}
+              (click)="selectLetter(letter)"
+              [disabled]="selectedLetters.includes(letter)">
+        {{ letter }}
       </button>
     </mat-card-actions>
   </mat-card>
-
 </div>
 
-<div class="float-left flex-1">
+<ng-container *ngIf="isLoading" class="max-h-max m-0">
+  <app-loader></app-loader>
+</ng-container>
+
+
+
+<div *ngIf="!isLoading" class="float-left flex-1">
   <button (click)="resetContentNavigation()" class="button-color cursor-pointer relative flex gap-1 px-8 py-4 bg-[#5c5fe9] text-[#f1f1f1] rounded-3xl hover:bg-opacity-70 font-semibold shadow-xl active:shadow-inner transition-all duration-300">
     Retornar
   </button>
 </div>
 
-<ng-template #loadingTemplate>
-  <!-- Skeleton Loader -->
-  <div *ngIf="isLoading" style="text-align: center; margin-top: 20px; z-index: 10">
-    <mat-spinner diameter="50"></mat-spinner>
-    <p>Aguarde, carregando nova palavra...</p>
-  </div>
-</ng-template>

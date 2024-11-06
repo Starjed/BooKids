@@ -1,69 +1,45 @@
 import { Component } from '@angular/core';
-import {
-  MatCard, MatCardActions,
-  MatCardContent,
-  MatCardHeader,
-  MatCardImage,
-  MatCardSubtitle,
-  MatCardTitle
-} from "@angular/material/card";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { Router } from "@angular/router";
+import { StateService } from "../../services/state.service";
+import {MatCard, MatCardActions, MatCardContent, MatCardImage} from "@angular/material/card";
 import {MatButton} from "@angular/material/button";
-import {NgForOf, NgIf, NgOptimizedImage} from "@angular/common";
-import {MatProgressSpinner} from "@angular/material/progress-spinner";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {Router} from "@angular/router";
-import {StateService} from "../../services/state.service";
+import {LoaderComponent} from "../../loader/loader.component";
+import {NgForOf, NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-soletrando',
   standalone: true,
+  templateUrl: './soletrando.component.html',
+  styleUrl: './soletrando.component.scss',
   imports: [
-    MatCard,
-    MatCardTitle,
-    MatCardSubtitle,
-    MatCardHeader,
     MatCardContent,
     MatCardImage,
     MatCardActions,
     MatButton,
-    NgOptimizedImage,
+    MatCard,
+    LoaderComponent,
     NgForOf,
-    MatProgressSpinner,
-    NgIf
-  ],
-  templateUrl: './soletrando.component.html',
-  styleUrl: './soletrando.component.scss'
+    NgIf,
+  ]
 })
 export class SoletrandoComponent {
 
   isLoading: boolean = false;
 
   words = [
-    { word: 'BEBE', syllables: ['BE', 'BE'], url: 'https://png.pngtree.com/png-clipart/20190116/ourmid/pngtree-cute-baby-sitting-baby-mother-and-baby-baby-with-open-hands-png-image_396696.jpg' },
-    { word: 'CARTA', syllables: ['CAR', 'TA'], url: 'https://i.pinimg.com/originals/e1/b0/f9/e1b0f90c48330ec1f86ff132f2815acc.png' },
-    { word: 'CARRO', syllables: ['CAR', 'RO'], url: 'https://w7.pngwing.com/pngs/828/685/png-transparent-volkswagen-brasilia-car-volkswagen-voyage-volkswagen-do-brasil-volkswagen-compact-car-sedan-car.png' }
+    { word: 'BEBE', url: 'assets/bebe.png' },
+    { word: 'BOLA', url: 'assets/ball.png'  }
   ];
 
-  currentWord: { word: string; syllables: string[]; url: string } | null = null;
-
-  distractorSyllables: string[] = ['LI', 'LE', 'BI', 'BE', 'RA', 'RO'];
-
+  currentWord: { word: string; url: string } | null = null;
   correctWord: string[] = [];
-
   displayedWord: Array<string | null> = [];
-
-  syllables: string[] = [];
-
-  selectedSyllables: string[] = [];
-
-  setWord(word: { word: string; syllables: string[]; url: string }) {
-    this.currentWord = word;
-  }
-
-  conteudo: string | null = null;
+  letters: string[] = [];
+  selectedLetters: string[] = [];
 
   constructor(private snackBar: MatSnackBar, private router: Router, private stateService: StateService) {
-    stateService.currentConteudo$.subscribe(conteudo => this.conteudo = conteudo);
+    // stateService.currentConteudo$.subscribe(conteudo => this.conteudo = conteudo);
   }
 
   ngOnInit() {
@@ -73,36 +49,18 @@ export class SoletrandoComponent {
   shuffleWord() {
     const randomIndex = Math.floor(Math.random() * this.words.length);
     const randomWordObj = this.words[randomIndex];
+    this.correctWord = randomWordObj.word.split('');
 
-    this.correctWord = randomWordObj.word.split(''); // Divide a palavra em caracteres
+    this.setWord(randomWordObj);
 
-    this.setWord(randomWordObj)
+    this.displayedWord = [this.correctWord[0], ...Array(this.correctWord.length - 1).fill(null)];
 
-    const revealedSyllable = randomWordObj.syllables[0]; // Primeira sílaba revelada
-    this.displayedWord = revealedSyllable.split(''); // Mostra a primeira sílaba
-
-    for (let i = revealedSyllable.length; i < this.correctWord.length; i++) {
-      this.displayedWord[i] = null;
-    }
-
-    const remainingSyllables = randomWordObj.syllables.slice(1);
-
-    const distractorCount = 3; // Número de sílabas distratoras a serem adicionadas
-    const randomDistractors = this.getRandomDistractors(distractorCount);
-
-    this.syllables = this.shuffleArray([...remainingSyllables, ...randomDistractors]);
+    const distractorLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+    this.letters = this.shuffleArray([...new Set([...this.correctWord.slice(1), ...distractorLetters])]);
   }
 
-  getRandomDistractors(count: number): string[] {
-    const randomDistractors = [];
-    const availableDistractors = [...this.distractorSyllables];
-
-    for (let i = 0; i < count; i++) {
-      const randomIndex = Math.floor(Math.random() * availableDistractors.length);
-      randomDistractors.push(availableDistractors.splice(randomIndex, 1)[0]);
-    }
-
-    return randomDistractors;
+  setWord(word: { word: string; url: string }) {
+    this.currentWord = word;
   }
 
   shuffleArray(array: any[]) {
@@ -113,23 +71,27 @@ export class SoletrandoComponent {
     return array;
   }
 
-  selectSyllable(syllable: string) {
-    const nextEmptyIndex = this.displayedWord.indexOf(null);
+  selectLetter(letter: string) {
+    const indices = this.correctWord
+      .map((char, index) => (char === letter ? index : -1))
+      .filter(index => index !== -1);
 
-    if (nextEmptyIndex !== -1 && this.isCorrectSyllable(syllable, nextEmptyIndex)) {
-      this.displayedWord[nextEmptyIndex] = syllable[0]; // Pega a primeira letra da sílaba
-      this.displayedWord[nextEmptyIndex + 1] = syllable[1]; // Pega a segunda letra da sílaba
-      this.selectedSyllables.push(syllable); // Adiciona a sílaba à lista de selecionadas
-
-      if (this.isWordComplete()) {
-        this.showSuccessMessage(); // Exibe o toaster quando a palavra for completa
+    indices.forEach(index => {
+      if (this.displayedWord[index] === null) {
+        this.displayedWord[index] = letter;
       }
+    });
+
+    const allOccurrencesFilled = indices.every(index => this.displayedWord[index] === letter);
+    if (allOccurrencesFilled) {
+      this.selectedLetters.push(letter);
+    }
+
+    if (this.isWordComplete()) {
+      this.showSuccessMessage();
     }
   }
 
-  isCorrectSyllable(syllable: string, index: number): boolean {
-    return syllable[0] === this.correctWord[index] && syllable[1] === this.correctWord[index + 1];
-  }
 
   isWordComplete(): boolean {
     return this.displayedWord.every(part => part !== null);
@@ -143,13 +105,12 @@ export class SoletrandoComponent {
     setTimeout(() => {
       this.isLoading = false;
       this.shuffleWord();
-      this.selectedSyllables = [];
+      this.selectedLetters = [];
     }, 3000);
   }
 
   resetContentNavigation() {
-    this.router.navigate(['/home'])
-    this.stateService.setConteudo(null)
+    this.router.navigate(['/home']);
+    this.stateService.setConteudo(null);
   }
-
 }

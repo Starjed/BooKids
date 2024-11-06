@@ -1,1 +1,32 @@
-<p>caca-palavras works!</p>
+<div *ngIf="!isLoading;">
+  <mat-card class="p-8" appearance="outlined" style="max-width: 80vh; margin: auto; background-color: #95C5DF; max-height: 80vh">
+    <div class="p-6">
+      <div *ngIf="currentWord">
+        <img mat-card-image class="p-4" src="{{currentWord.url}}" alt="Imagem de exemplo" style="width: 100%; background-color: #95C5DF; max-height: 50vh">
+      </div>
+    </div>
+
+
+    <mat-card-actions class="word-selection flex items-center justify-center" style="display: flex; flex-wrap: wrap;">
+      <button *ngFor="let option of options"
+              mat-flat-button
+              color="primary"
+              style="margin: 5px; font-size: 1.2em"
+              (click)="selectWord(option)">
+        {{ option.word }}
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>
+
+<ng-container *ngIf="isLoading" class="max-h-max m-0">
+  <app-loader></app-loader>
+</ng-container>
+
+
+<div *ngIf="!isLoading" class="float-left flex-1">
+  <button (click)="resetContentNavigation()" class="button-color cursor-pointer relative flex gap-1 px-8 py-4 bg-[#5c5fe9] text-[#f1f1f1] rounded-3xl hover:bg-opacity-70 font-semibold shadow-xl active:shadow-inner transition-all duration-300">
+    Retornar
+  </button>
+</div>
+

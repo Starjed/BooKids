@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { WordCardComponent } from './word-card.component';
+import { WordCardComponent } from './anagrama.component';
 
 describe('WordCardComponent', () => {
   let component: WordCardComponent;
@@ -11,7 +11,7 @@ describe('WordCardComponent', () => {
       imports: [WordCardComponent]
     })
     .compileComponents();
-    
+
     fixture = TestBed.createComponent(WordCardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -1,0 +1,48 @@
+<div *ngIf="!isLoading">
+  <mat-card class="p-4 m-auto" appearance="outlined" style="max-width: 80vh; background-color: #95C5DF;">
+
+    <mat-card-content>
+      <h1 class="current-word-display">
+        Palavra Atual:
+        <span *ngFor="let letter of currentWord">{{ letter || '_' }}</span>
+      </h1>
+    </mat-card-content>
+
+    <!-- Botões para selecionar letras -->
+    <mat-card-actions class="letter-selection flex items-center justify-center flex-wrap">
+      <div class="flex gap-4 w-full justify-evenly">
+
+        <div class="flex flex-row gap-2">
+          <span *ngFor="let letter of letters"
+                  class="m-1 select-button"
+                  (click)="addLetter(letter)">
+            {{ letter }}
+          </span>
+        </div>
+
+      </div>
+
+      <button mat-flat-button color="warn" (click)="removeLastLetter()">Remover Última Letra</button>
+    </mat-card-actions>
+
+    <mat-card-content>
+      <div class="words-display">
+        <h4>Palavras Possíveis:</h4>
+
+        <div *ngFor="let length of [3, 4, 5, 6]" class="word-length-group">
+          <strong>{{ length }} letras:</strong>
+          <div class="word-row">
+            <span *ngFor="let placeholder of displayList[length]" class="word-placeholder">
+              {{ placeholder }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+
+
+<button mat-flat-button color="accent" (click)="checkWord()">Checar Palavra</button>
+

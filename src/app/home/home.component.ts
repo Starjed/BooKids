@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import {SidenavComponent} from "../components/sidenav/sidenav.component";
-import {WordCardComponent} from "../components/word-card/word-card.component";
 import {MatButton} from "@angular/material/button";
 import {Router, RouterLink, RouterOutlet} from "@angular/router";
 import {StateService} from "../services/state.service";
@@ -10,7 +9,6 @@ import {StateService} from "../services/state.service";
   standalone: true,
   imports: [
     SidenavComponent,
-    WordCardComponent,
     MatButton,
     RouterLink,
     RouterOutlet
