@@ -8,12 +8,10 @@
 
 
     <mat-card-actions class="word-selection flex items-center justify-center" style="display: flex; flex-wrap: wrap;">
-      <button *ngFor="let option of options"
-              mat-flat-button
-              color="primary"
-              style="margin: 5px; font-size: 1.2em"
-              (click)="selectWord(option)">
-        {{ option.word }}
+      <button *ngFor="let option of words" class="button-selection" style="margin: 5px; font-size: 1.2em" (click)="selectWord(option)">
+        <ng-container *ngFor="let syllable of option.syllables">
+          <span [ngStyle]="{ 'color': syllable.color }" class="texto">{{ syllable.text }}</span>
+        </ng-container>
       </button>
     </mat-card-actions>
   </mat-card>

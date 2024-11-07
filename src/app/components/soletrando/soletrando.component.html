@@ -16,8 +16,7 @@
 
     <mat-card-actions class="letter-selection flex items-center justify-center" style="display: flex; flex-wrap: wrap;">
       <button *ngFor="let letter of letters"
-              mat-flat-button
-              color="primary"
+              class="button-selection texto"
               style="margin: 5px;"
               (click)="selectLetter(letter)"
               [disabled]="selectedLetters.includes(letter)">

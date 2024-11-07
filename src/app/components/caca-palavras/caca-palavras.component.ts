@@ -4,7 +4,7 @@ import { Router } from "@angular/router";
 import { StateService } from "../../services/state.service";
 import {MatButton} from "@angular/material/button";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
-import {NgForOf, NgIf} from "@angular/common";
+import {NgForOf, NgIf, NgStyle} from "@angular/common";
 import {MatCard, MatCardActions, MatCardContent, MatCardImage} from "@angular/material/card";
 import {LoaderComponent} from "../../loader/loader.component";
 
@@ -23,6 +23,7 @@ import {LoaderComponent} from "../../loader/loader.component";
     MatCard,
     NgForOf,
     LoaderComponent,
+    NgStyle,
   ]
 })
 export class CacaPalavrasComponent {
@@ -30,10 +31,10 @@ export class CacaPalavrasComponent {
   isLoading: boolean = false;
 
   words = [
-    { word: 'BEBE', url: 'assets/bebe.png' },
-    { word: 'BOLA', url: 'assets/ball.png'  },
-    { word: 'SOL', url: 'https://cdn-icons-png.flaticon.com/512/869/869869.png' },
-    { word: 'GATO', url: 'assets/gato.jpg' },
+    { word: 'BEBE', syllables: [{ text: 'BE', color: 'yellow' }, { text: 'BE', color: 'orange' }], url: 'assets/bebe.png' },
+    { word: 'BOLA', syllables: [{ text: 'BO', color: 'red' }, { text: 'LA', color: 'green' }], url: 'assets/ball.png' },
+    { word: 'SOL', syllables: [{ text: 'SOL', color: 'yellow' }], url: 'https://cdn-icons-png.flaticon.com/512/869/869869.png' },
+    { word: 'GATO', syllables: [{ text: 'GA', color: 'orange' }, { text: 'TO', color: 'blue' }], url: 'assets/gato.jpg' }
   ];
 
   currentWord: { word: string; url: string } | null = null;
@@ -90,3 +91,4 @@ export class CacaPalavrasComponent {
     this.stateService.setConteudo(null);
   }
 }
+

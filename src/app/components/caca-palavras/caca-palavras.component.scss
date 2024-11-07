@@ -12,3 +12,26 @@
 .button-color {
   background-color: #1F8FCD;
 }
+
+.button-color:hover {
+  cursor: pointer;
+  background-color: #0d5a88;
+}
+
+.button-selection {
+  background-color: #1F8FCD;
+  width: 5em;
+  height: 3em;
+  color: white;
+  border-radius: 8px;
+}
+
+.button-selection:hover {
+  cursor: pointer;
+  background-color: #0d5a88;
+}
+
+.texto {
+  font-weight: bold;
+  font-size: 30px;
+}

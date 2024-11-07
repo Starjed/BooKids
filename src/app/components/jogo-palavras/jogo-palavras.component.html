@@ -20,23 +20,19 @@
         <!-- Primeira coluna -->
         <div class="flex flex-col gap-2">
           <button *ngFor="let silaba of silabas.slice(0, silabas.length / 2)"
-                  mat-flat-button
-                  color="primary"
-                  class="m-1"
+                  class="m-1 texto button-selection"
                   (click)="selecionarSilaba(silaba)"
                   [disabled]="silabasSelecionadas.includes(silaba)">
-            {{ silaba }}
+            {{ '__' + silaba }}
           </button>
         </div>
         <!-- Segunda coluna -->
         <div class="flex flex-col gap-2">
           <button *ngFor="let silaba of silabas.slice(silabas.length / 2)"
-                  mat-flat-button
-                  color="primary"
-                  class="m-1"
+                  class="m-1 texto button-selection"
                   (click)="selecionarSilaba(silaba)"
                   [disabled]="silabasSelecionadas.includes(silaba)">
-            {{ silaba }}
+            {{ '__' + silaba }}
           </button>
         </div>
       </div>

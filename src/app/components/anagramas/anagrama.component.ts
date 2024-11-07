@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import {MatButton} from "@angular/material/button";
 import {MatCard, MatCardActions, MatCardContent} from "@angular/material/card";
 import {NgForOf, NgIf} from "@angular/common";
+import {Router} from "@angular/router";
+import {StateService} from "../../services/state.service";
 
 @Component({
   selector: 'app-anagrama',
@@ -59,5 +61,13 @@ export class AnagramaComponent {
 
     // Limpar palavra atual após verificar
     this.currentWord = [];
+  }
+
+  constructor(private router: Router, private stateService: StateService) {
+  }
+
+  resetContentNavigation() {
+    this.router.navigate(['/home']);
+    this.stateService.setConteudo(null);
   }
 }

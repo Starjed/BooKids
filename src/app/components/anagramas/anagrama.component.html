@@ -42,7 +42,15 @@
   </mat-card>
 </div>
 
+<div>
 
+<div *ngIf="!isLoading" class="float-left flex-1">
+  <button (click)="resetContentNavigation()" class="button-color cursor-pointer relative flex gap-1 px-8 py-4 bg-[#5c5fe9] text-[#f1f1f1] rounded-3xl hover:bg-opacity-70 font-semibold shadow-xl active:shadow-inner transition-all duration-300">
+    Retornar
+  </button>
+</div>
 
-<button mat-flat-button color="accent" (click)="checkWord()">Checar Palavra</button>
+  <button class="float-right button-color cursor-pointer relative flex gap-1 px-8 py-4 bg-[#5c5fe9] text-[#f1f1f1] rounded-3xl hover:bg-opacity-70 font-semibold shadow-xl active:shadow-inner transition-all duration-300"
+          (click)="checkWord()">Confirmar</button>
 
+</div>
