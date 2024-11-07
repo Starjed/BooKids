@@ -9,7 +9,7 @@
     </mat-card-content>
 
     <!-- Botões para selecionar letras -->
-    <mat-card-actions class="letter-selection flex items-center justify-center flex-wrap">
+    <mat-card-actions class="letter-selection flex items-center justify-center flex-wrap p-4">
       <div class="flex gap-4 w-full justify-evenly">
 
         <div class="flex flex-row gap-2">
@@ -27,18 +27,14 @@
 
     <mat-card-content>
       <div class="words-display">
-        <h4>Palavras Possíveis:</h4>
-
-        <div *ngFor="let length of [3, 4, 5, 6]" class="word-length-group">
-          <strong>{{ length }} letras:</strong>
-          <div class="word-row">
-            <span *ngFor="let placeholder of displayList[length]" class="word-placeholder">
-              {{ placeholder }}
-            </span>
+        <div class="word-columns">
+          <div *ngFor="let word of revealedWords" class="word-item">
+            {{ word }}
           </div>
         </div>
       </div>
     </mat-card-content>
+
   </mat-card>
 </div>
 

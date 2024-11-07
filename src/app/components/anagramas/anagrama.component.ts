@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import {MatButton} from "@angular/material/button";
 import {MatCard, MatCardActions, MatCardContent} from "@angular/material/card";
-import {NgForOf, NgIf} from "@angular/common";
+import {NgForOf, NgIf, SlicePipe} from "@angular/common";
 import {Router} from "@angular/router";
 import {StateService} from "../../services/state.service";
 
@@ -15,27 +15,26 @@ import {StateService} from "../../services/state.service";
     NgForOf,
     MatCardActions,
     MatCard,
-    NgIf
+    NgIf,
+    SlicePipe
   ],
   styleUrls: ['./anagrama.component.scss']
 })
 export class AnagramaComponent {
   letters: string[] = ['A', 'M', 'P', 'R', 'O'];
   currentWord: string[] = [];
-  possibleWords: { [key: number]: string[] } = {
-    2: ['AR', 'PAO'],
-    3: ['MAR', 'PAO'],
-    4: ['RAMO', 'PARO', 'ROMA', 'AMOR'],
-    5: ['POMAR'],
-  };
-  displayList: { [key: number]: string[] } = {
-    2: Array(3).fill('--'),
-    3: Array(3).fill('---'),
-    4: Array(2).fill('----'),
-    5: Array(2).fill('-----'),
-    6: Array(1).fill('------'),
-  };
-  wordsFormed: string[] = [];
+  possibleWords: string[] = ['AR', 'PAO', 'MAR', 'RAMO', 'PARO', 'ROMA', 'AMOR', 'POMAR'];
+  revealedWords: string[] = Array(8).fill('----');
+
+  checkWord(): void {
+    const word = this.currentWord.join('');
+    const index = this.possibleWords.indexOf(word);
+    if (index !== -1) {
+      this.revealedWords[index] = word;
+    }
+    this.currentWord = [];
+  }
+
   isLoading = false;
 
   addLetter(letter: string) {
@@ -44,23 +43,6 @@ export class AnagramaComponent {
 
   removeLastLetter() {
     this.currentWord.pop();
-  }
-
-  checkWord() {
-    const word = this.currentWord.join('');
-    const wordLength = word.length;
-
-    if (this.possibleWords[wordLength]?.includes(word) && !this.wordsFormed.includes(word)) {
-      this.wordsFormed.push(word);
-
-      const wordIndex = this.possibleWords[wordLength].indexOf(word);
-      if (wordIndex !== -1) {
-        this.displayList[wordLength][wordIndex] = word;
-      }
-    }
-
-    // Limpar palavra atual após verificar
-    this.currentWord = [];
   }
 
   constructor(private router: Router, private stateService: StateService) {

@@ -59,3 +59,27 @@ button {
 .button-color {
   background-color: #1F8FCD;
 }
+
+
+
+.words-display {
+  text-align: center;
+}
+
+.word-columns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center; /* Centraliza as colunas */
+}
+
+.word-item {
+  flex: 1 1 calc(50% - 8px); /* Cada item ocupa 50% da largura disponível */
+  background-color: #2196F3;
+  color: white;
+  padding: 8px;
+  text-align: center;
+  border-radius: 16px;
+  font-weight: bold;
+  height: 2em;
+}
